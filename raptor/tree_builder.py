@@ -1,6 +1,7 @@
 import copy
 import logging
 import os
+from time import sleep
 from abc import abstractclassmethod
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
@@ -257,7 +258,7 @@ class TreeBuilder:
 
         return leaf_nodes
 
-    def build_from_text(self, text: str, use_multithreading: bool = True) -> Tree:
+    def build_from_text(self, text: str, use_multithreading: bool = False) -> Tree:
         """Builds a golden tree from the input text, optionally using multithreading.
 
         Args:
@@ -279,6 +280,7 @@ class TreeBuilder:
             for index, text in enumerate(chunks):
                 __, node = self.create_node(index, text)
                 leaf_nodes[index] = node
+                sleep(1)
 
         layer_to_nodes = {0: list(leaf_nodes.values())}
 

@@ -75,7 +75,7 @@ class GPT3SummarizationModel(BaseSummarizationModel):
 
 
 from clova_interface import BaseClovaInterface
-class ClovaEmbeddingModel(BaseClovaInterface, BaseSummarizationModel):
+class ClovaSummarizationModel(BaseClovaInterface, BaseSummarizationModel):
     def __init__(self):
         super().__init__()
     

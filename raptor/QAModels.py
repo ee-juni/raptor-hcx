@@ -186,7 +186,7 @@ class UnifiedQAModel(BaseQAModel):
 
 
 from clova_interface import BaseClovaInterface
-class ClovaEmbeddingModel(BaseClovaInterface, BaseQAModel):
+class ClovaQAModel(BaseClovaInterface, BaseQAModel):
     def __init__(self):
         super().__init__()
     
