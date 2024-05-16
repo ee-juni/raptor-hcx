@@ -72,3 +72,14 @@ class GPT3SummarizationModel(BaseSummarizationModel):
         except Exception as e:
             print(e)
             return e
+
+
+from clova_interface import BaseClovaInterface
+class ClovaEmbeddingModel(BaseClovaInterface, BaseSummarizationModel):
+    def __init__(self):
+        super().__init__()
+    
+    def summarize(self, context, max_tokens=1024):
+        system_prompt = "주어진 [글]에 대한 [요약]을 작성합니다. 간결하게 하되, 핵심 내용을 모두 포함시켜 요약합니다."
+        user_prompt = f"[글]\n{context}\n\n[요약]\n"
+        return self.execute(self.input_prompts(system_prompt, user_prompt))

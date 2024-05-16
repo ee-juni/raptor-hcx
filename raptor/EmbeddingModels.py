@@ -35,3 +35,15 @@ class SBertEmbeddingModel(BaseEmbeddingModel):
 
     def create_embedding(self, text):
         return self.model.encode(text)
+
+from clova_interface import BaseClovaInterface
+class ClovaEmbeddingModel(BaseClovaInterface, BaseEmbeddingModel):
+    def __init__(self):
+        super().__init__()
+    
+    def create_embedding(self, text):
+        resp = self.embed_text(text)
+        if resp=="Error":
+            raise Exception("Embedding error occured")
+        else:
+            return resp['embedding']

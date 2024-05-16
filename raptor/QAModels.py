@@ -183,3 +183,14 @@ class UnifiedQAModel(BaseQAModel):
         input_string = question + " \\n " + context
         output = self.run_model(input_string)
         return output[0]
+
+
+from clova_interface import BaseClovaInterface
+class ClovaEmbeddingModel(BaseClovaInterface, BaseQAModel):
+    def __init__(self):
+        super().__init__()
+    
+    def answer_question(self, context, question):
+        system_prompt = "주어진 [문맥]을 참고하여 [질문]에 대해 [답변]합니다. [문맥] 내용만을 바탕으로 [답변]을 작성합니다."
+        user_prompt = f"[문맥]\n{context}\n\n[질문]\n{question}\n\n[답변]\n"
+        return self.execute(self.input_prompts(system_prompt, user_prompt))
