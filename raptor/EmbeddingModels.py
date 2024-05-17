@@ -42,7 +42,7 @@ class ClovaEmbeddingModel(BaseClovaInterface, BaseEmbeddingModel):
         super().__init__()
     
     def create_embedding(self, text):
-        resp = self.embed_text(text)
+        resp = self.embed_text(text, embedding_type="clir-sts-dolphin")
         if resp=="Error":
             raise Exception("Embedding error occured")
         else:

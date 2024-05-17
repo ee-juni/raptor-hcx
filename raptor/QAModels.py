@@ -191,10 +191,10 @@ class ClovaQAModel(BaseClovaInterface, BaseQAModel):
         super().__init__()
     
     def answer_question(self, context, question, reranking=False):
+        contexts = context.split("\n\n")
         if reranking:
-            contexts = context.split("\n\n")
             context = self.rerank_by_llm(question, contexts)
-        system_prompt = "주어진 [문맥]을 참고하여 [질문]에 대해 [답변]합니다. [문맥] 내용만을 바탕으로 [답변]을 작성합니다."
-        user_prompt = f"[문맥]\n{context}\n\n[질문]\n{question}\n\n[답변]\n"
+        system_prompt = "- [문맥]을 바탕으로 사용자의 [질문]에 [답변]합니다. \n- 가지고 있는 지식은 모두 배제하고, 주어진 [문맥]의 내용만을 바탕으로 [답변]해야합니다. \n- 만약 사용자의 [질문]이 [문맥]과 관련이 없다면, {제가 가지고 있는 정보로는 답변할 수 없습니다.}라고만 반드시 답변합니다. \n\n[문맥]\n - "+" \n - ".join(contexts)
+        user_prompt = f"[질문]\n{question}\n\n[답변]\n"
         print(user_prompt)
         return self.execute(self.input_prompts(system_prompt, user_prompt))

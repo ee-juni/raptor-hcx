@@ -100,8 +100,12 @@ class BaseClovaInterface:
         iterator = StreamIterator()
         return iterator
 
-
-    def embed_text(self, text: str):
+    def embed_text(self, text: str, embedding_type="clir-emb-dolphin"):
+        '''
+        embedding_type:
+            "clir-emb-dolphin" - 모든 도메인에 적용할 수 있는 좋은 범용성을 가진 모델
+            "clir-sts-dolphin" - 문장의 의미적 디테일을 정밀하게 측정하는데 특화된 모델
+        '''
         headers = {
             'Content-Type': 'application/json; charset=utf-8',
             'X-NCP-CLOVASTUDIO-API-KEY': self._service_api_key,
@@ -110,7 +114,7 @@ class BaseClovaInterface:
         }
 
         response = requests.post(
-            self._embedding_api_url,
+            self._embedding_api_url.replace("clir-emb-dolphin", embedding_type),
             headers=headers,
             json={'text': text})
         res = eval(response.text.replace("null","None"))
@@ -140,8 +144,6 @@ class BaseClovaInterface:
         )
         return eval(response.text.replace("null","None"))
         
-        
-
     def calc_token(self, messages: list):
         headers = {
             'Content-Type': 'application/json; charset=utf-8',
