@@ -184,3 +184,11 @@ class BaseClovaInterface:
             return res['result']
         else:
             return "Error"
+        
+    def rerank_by_llm(self, question: str, contexts):
+        system_prompt = '''### 명령
+[문맥]들 중 주어진 [질문]을 답변하기 위해 필요한 [문맥]들만 골라서 [출력]해줍니다.
+'''
+        user_prompt = "[질문] "+question+"\n[문맥]\n- "+'\n- '.join(contexts)+"\n[출력]\n"
+        rerank_response = self.execute(self.input_prompts(system_prompt, user_prompt))
+        return rerank_response

@@ -269,6 +269,7 @@ class RetrievalAugmentation:
         max_tokens: int = 3500,
         collapse_tree: bool = True,
         return_layer_information: bool = False,
+        reranking: bool = False
     ):
         """
         Retrieves information and answers a question using the TreeRetriever instance.
@@ -291,7 +292,7 @@ class RetrievalAugmentation:
             question, start_layer, num_layers, top_k, max_tokens, collapse_tree, True
         )
 
-        answer = self.qa_model.answer_question(context, question)
+        answer = self.qa_model.answer_question(context, question, reranking)
 
         if return_layer_information:
             return answer, layer_information
