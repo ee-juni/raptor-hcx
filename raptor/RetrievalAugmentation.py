@@ -206,7 +206,7 @@ class RetrievalAugmentation:
         Adds documents to the tree and creates a TreeRetriever instance.
 
         Args:
-            docs (str): The input text to add to the tree.
+            docs (List[String]): The list of text to add to the tree.
         """
         if self.tree is not None:
             user_input = input(

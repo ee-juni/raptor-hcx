@@ -7,6 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 from typing import Dict, List, Optional, Set, Tuple
 
+from clova_interface import BaseClovaInterface
+interface = BaseClovaInterface()
+
 import openai
 import tiktoken
 from tenacity import retry, stop_after_attempt, wait_random_exponential
@@ -258,18 +261,29 @@ class TreeBuilder:
 
         return leaf_nodes
 
-    def build_from_text(self, text: str, use_multithreading: bool = False) -> Tree:
+    def build_from_text(self, text: list, use_multithreading: bool = False) -> Tree:
         """Builds a golden tree from the input text, optionally using multithreading.
 
         Args:
-            text (str): The input text.
+            text (List[String]): The list of input texts.
             use_multithreading (bool, optional): Whether to use multithreading when creating leaf nodes.
                 Default: True.
 
         Returns:
             Tree: The golden tree structure.
         """
-        chunks = split_text(text, self.tokenizer, self.max_tokens)
+        chunks = []
+        for paragraph in text:
+            resp = interface.chunk_text(paragraph)
+            status_code = resp['status']['code']
+            if status_code == '40004':
+                continue
+            if status_code != '20000':
+                print(resp)
+                raise Exception("Chunking error occured")
+            chunks.extend(resp['result']['topicSeg'][0])
+            print(f"Chunking successful!")
+            sleep(0.51)
 
         logging.info("Creating Leaf Nodes")
 
@@ -280,6 +294,7 @@ class TreeBuilder:
             for index, text in enumerate(chunks):
                 __, node = self.create_node(index, text)
                 leaf_nodes[index] = node
+                print(f"Created leaf node {index}")
                 sleep(1)
 
         layer_to_nodes = {0: list(leaf_nodes.values())}

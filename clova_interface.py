@@ -135,14 +135,11 @@ class BaseClovaInterface:
                 "segCnt" : -1,
                 "postProcess" : True,
                 "postProcessMaxSize" : 2000,
-                "postProcessMinSize" : 500
+                "postProcessMinSize" : 100
             }
         )
-        res = eval(response.text.replace("null","None"))
-        if res['status']['code'] == '20000':
-            return res['result']
-        else:
-            return "Error"
+        return eval(response.text.replace("null","None"))
+        
         
 
     def calc_token(self, messages: list):
