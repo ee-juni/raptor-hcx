@@ -47,3 +47,11 @@ class ClovaEmbeddingModel(BaseClovaInterface, BaseEmbeddingModel):
             raise Exception("Embedding error occured")
         else:
             return resp['embedding']
+
+from FlagEmbedding import BGEM3FlagModel
+class BGEM3EmbeddingModel(BaseEmbeddingModel):
+    def __init__(self):
+        self.model = BGEM3FlagModel('BAAI/bge-m3',  use_fp16=True) 
+    
+    def create_embedding(self, text):
+        return self.model.encode(text)['dense_vecs']
